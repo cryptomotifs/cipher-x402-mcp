@@ -1,15 +1,18 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
   "buildCommand": "npm run build",
   "installCommand": "npm install",
-  "outputDirectory": "dist",
   "rewrites": [
-    { "source": "/mcp", "destination": "/api/mcp" },
-    { "source": "/", "destination": "/api/index" }
+    { "source": "/mcp", "destination": "/api/mcp" }
   ],
   "functions": {
     "api/mcp.ts": {
-      "maxDuration": 30
+      "maxDuration": 30,
+      "runtime": "@vercel/node@5.1.10"
+    },
+    "api/index.ts": {
+      "runtime": "@vercel/node@5.1.10"
     }
   }
 }
