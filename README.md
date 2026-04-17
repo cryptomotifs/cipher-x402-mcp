@@ -153,6 +153,9 @@ No pressure — star the repo or share it and that's equally valued.
 
 - **cipher-starter** — free MIT Solana solo-dev playbook
   ([github.com/cryptomotifs/cipher-starter](https://github.com/cryptomotifs/cipher-starter)).
+- **cipher-solana-bot-toolkit** — free MIT toolkit: flash-loan router, volume bot,
+  arb/MEV predator, memecoin launcher, copy trader — 5 scrubbed modules
+  ([github.com/cryptomotifs/cipher-solana-bot-toolkit](https://github.com/cryptomotifs/cipher-solana-bot-toolkit)).
 - **cipher-solana-wallet-audit** — free GitHub Action (v1.1.0) that fails
   CI on plaintext Solana private keys
   ([github.com/cryptomotifs/cipher-solana-wallet-audit](https://github.com/cryptomotifs/cipher-solana-wallet-audit)).
