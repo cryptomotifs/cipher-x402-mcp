@@ -25,7 +25,7 @@ export default function handler(
         })),
         repo: "https://github.com/cryptomotifs/cipher-x402-mcp",
         docs: "https://github.com/cryptomotifs/cipher-x402-mcp#readme",
-        x402_recipient: "0xa0630fAD18C732e94D56d2D5F630963eb8fB9640",
+        x402_recipient: "0x2a33D2414312e8776dA4011c2586c2d067267210",
         x402_network: "eip155:8453",
         x402_asset: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
       },
