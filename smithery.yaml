@@ -3,10 +3,9 @@
 #
 # This server is free to install and lists 8 tools. Seven of them are
 # x402-gated upstream — the caller's agent pays $0.005-$0.25 USDC on Base
-# per tool call directly to the CIPHER wallet
-# (0x2a33D2414312e8776dA4011c2586c2d067267210). The MCP server itself
-# never sees a user payment; it is a forward-only relay of the 402
-# accept-list.
+# per tool call directly to the upstream payout wallet advertised in the
+# x402 accept-list. The MCP server itself never sees a user payment; it is
+# a forward-only relay of the 402 accept-list.
 
 startCommand:
   type: stdio

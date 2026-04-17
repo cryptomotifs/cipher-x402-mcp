@@ -5,37 +5,6 @@
 [![MCP](https://img.shields.io/badge/MCP-server-8A2BE2)](https://modelcontextprotocol.io)
 [![x402](https://img.shields.io/badge/x402-v2-00d084)](https://x402.org)
 
----
-
-## 💰 x402 Paid Endpoint Starter Kit — $15
-
-The same production-grade paywall stack behind this MCP server, packaged as a
-Next.js 16 starter you can deploy in under 30 minutes.
-
-**What's in the ZIP (158 KB):**
-- Complete Next.js 16 starter repo, zero placeholders
-- Pre-wired x402 facilitator middleware
-- `.env.example` with every variable commented
-- 7-page tutorial PDF (the same article I published on dev.to, styled)
-- One-command Vercel deploy script (`deploy.sh` + `deploy.bat`)
-
-**How to buy (crypto-direct, no KYC, no middleman):**
-
-1. Send **$15 USD-equivalent** to one of the wallets below.
-2. Email the TX hash to **amrinder847@gmail.com** with subject `[x402-kit] <chain>:<tx-hash>`.
-3. Get the ZIP in reply within minutes — delivery is automated.
-
-| Chain | Asset | Address |
-|-------|-------|---------|
-| Base mainnet | USDC | `0x2a33D2414312e8776dA4011c2586c2d067267210` |
-| Ethereum / Polygon / Arbitrum / Optimism | USDC | `0x2a33D2414312e8776dA4011c2586c2d067267210` |
-| Solana | USDC or SOL | `cR9KrbsLVJvir5rY9cfY3WeNoxMwUGofzpCoVyobryy` |
-| Bitcoin | BTC | `bc1qeg97njaccajx95as5k3gelrpx0umlw6dhhtfc6` |
-
-_Subject format is strict — include the `chain:hash` exactly so the verifier picks it up._
-
----
-
 An MCP server that exposes 8 Solana / crypto / macro tools to any MCP-aware
 client (Claude Desktop, Cursor, Cline, Continue, etc.). Seven of the tools
 are gated behind the **x402** payment protocol — agents auto-pay in USDC on
@@ -45,6 +14,10 @@ Base, $0.005 – $0.25 per tool call. One tool is free (educational).
 > without an `X-PAYMENT` header, we surface the upstream `HTTP 402` +
 > accept-list verbatim so the agent's own wallet signs the payment. We
 > never custody caller funds.
+
+**Free + MIT-licensed.** Fork it, ship your own, no strings.
+
+---
 
 ## Tools
 
@@ -59,10 +32,9 @@ Base, $0.005 – $0.25 per tool call. One tool is free (educational).
 | `solana_wallet_security_audit_rules()` | **free** | local (v1.1.0 ruleset) |
 | `get_premium_cipher_chapter(slug)` | $0.25 | `cipher-x402.vercel.app` |
 
-Payment recipient: `0x2a33D2414312e8776dA4011c2586c2d067267210` (Base, USDC
-`0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913`).
-
-_Upstream endpoints are being rotated to this address during the 2026-04-17 cutover; if your x402 client reports the legacy `0xa063...9640` recipient, the rotation has not yet reached that endpoint. See `docs/ops/payout-rotation.md` for status._
+Base network, USDC asset `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913`. The
+current x402 payout recipient is exposed via the root `/` JSON manifest at
+runtime — agents discover it automatically, you don't configure it by hand.
 
 ## Install (Claude Desktop)
 
@@ -114,7 +86,19 @@ Probe the manifest at the root URL.
 
 The server itself is stateless — no API keys, no user session, no funds.
 
-## Develop locally
+---
+
+## 🏃 Run it yourself
+
+### Prerequisites
+
+- **Node.js 20+** (22 recommended)
+- **npm 10+**
+- A Vercel account (free tier) if you want to deploy the HTTP transport
+- No API keys required for local stdio use — the server is a pass-through
+  to public upstream endpoints
+
+### Clone + build
 
 ```bash
 git clone https://github.com/cryptomotifs/cipher-x402-mcp
@@ -126,7 +110,24 @@ npm start         # stdio transport
 npm run start:http  # HTTP transport on :8080
 ```
 
-## Deploy HTTP transport (Vercel)
+### Configure your own upstream endpoints (optional)
+
+All upstream base URLs are overridable via env — useful if you fork the
+upstream endpoints to your own Vercel project and want the MCP server to
+route to them:
+
+```bash
+CIPHER_SCAN_API_URL=https://your-scan.example.com \
+CIPHER_PWNED_URL=https://your-pwned.example.com \
+CIPHER_JITO_TIP_URL=https://your-jito.example.com \
+CIPHER_REPO_HEALTH_URL=https://your-repo-health.example.com \
+CIPHER_FRED_URL=https://your-fred.example.com \
+CIPHER_DRIFT_URL=https://your-drift.example.com \
+CIPHER_X402_URL=https://your-x402.example.com \
+  npx cipher-x402-mcp
+```
+
+### Deploy to Vercel
 
 ```bash
 vercel link
@@ -136,15 +137,17 @@ vercel --prod
 The `/mcp` route serves MCP JSON-RPC messages; `/` serves a lightweight
 JSON manifest used by registries.
 
-## Environment overrides
+---
 
-All upstream base URLs are overridable (useful for private mirrors):
+## 🙏 Support
 
-```bash
-CIPHER_SCAN_API_URL=https://your-scan.example.com \
-CIPHER_PWNED_URL=https://your-pwned.example.com \
-  npx cipher-x402-mcp
-```
+This is free + MIT. If it saved you time, tips in SOL are appreciated:
+
+`cR9KrbsLVJvir5rY9cfY3WeNoxMwUGofzpCoVyobryy`
+
+No pressure — star the repo or share it and that's equally valued.
+
+---
 
 ## Related
 
@@ -153,8 +156,6 @@ CIPHER_PWNED_URL=https://your-pwned.example.com \
 - **cipher-solana-wallet-audit** — free GitHub Action (v1.1.0) that fails
   CI on plaintext Solana private keys
   ([github.com/cryptomotifs/cipher-solana-wallet-audit](https://github.com/cryptomotifs/cipher-solana-wallet-audit)).
-- **cipher-x402** — four premium chapters, paid in USDC on Base at
-  [cipher-x402.vercel.app](https://cipher-x402.vercel.app).
 
 ## License
 
