@@ -1,0 +1,55 @@
+{
+  "name": "cipher-x402-mcp",
+  "version": "0.1.0",
+  "description": "MCP server exposing 8 CIPHER x402-gated Solana/crypto/macro tools. AI agents auto-pay via the x402 protocol (USDC on Base) per tool call.",
+  "type": "module",
+  "main": "dist/stdio.js",
+  "bin": {
+    "cipher-x402-mcp": "dist/stdio.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "smithery.yaml"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/stdio.js",
+    "start:http": "node dist/http.js",
+    "typecheck": "tsc --noEmit",
+    "smoke": "node dist/smoke.js",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "x402",
+    "solana",
+    "usdc",
+    "base",
+    "wallet",
+    "cipher",
+    "ai-agents",
+    "claude",
+    "cursor",
+    "paid-api"
+  ],
+  "author": "cryptomotifs",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cryptomotifs/cipher-x402-mcp.git"
+  },
+  "homepage": "https://github.com/cryptomotifs/cipher-x402-mcp",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

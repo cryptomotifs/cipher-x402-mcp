@@ -1,0 +1,62 @@
+# Smithery config for cipher-x402-mcp
+# https://smithery.ai/docs/config
+#
+# This server is free to install and lists 8 tools. Seven of them are
+# x402-gated upstream — the caller's agent pays $0.005-$0.25 USDC on Base
+# per tool call directly to the CIPHER wallet
+# (0xa0630fAD18C732e94D56d2D5F630963eb8fB9640). The MCP server itself
+# never sees a user payment; it is a forward-only relay of the 402
+# accept-list.
+
+startCommand:
+  type: stdio
+  configSchema:
+    type: object
+    additionalProperties: false
+    properties:
+      CIPHER_SCAN_API_URL:
+        type: string
+        default: https://cipher-scan-three.vercel.app
+        description: Override base URL for the Solana wallet scanner.
+      CIPHER_PWNED_URL:
+        type: string
+        default: https://cipher-pwned.vercel.app
+        description: Override base URL for the password-breach checker.
+      CIPHER_JITO_TIP_URL:
+        type: string
+        default: https://cipher-jito-tip.vercel.app
+        description: Override base URL for the Jito tip calculator.
+      CIPHER_REPO_HEALTH_URL:
+        type: string
+        default: https://cipher-repo-health.vercel.app
+        description: Override base URL for the GitHub repo health scorer.
+      CIPHER_FRED_URL:
+        type: string
+        default: https://cipher-fred.vercel.app
+        description: Override base URL for the FRED macro-series endpoint.
+      CIPHER_DRIFT_URL:
+        type: string
+        default: https://cipher-drift-exposure.vercel.app
+        description: Override base URL for the Drift Protocol exposure endpoint.
+      CIPHER_X402_URL:
+        type: string
+        default: https://cipher-x402.vercel.app
+        description: Override base URL for the premium chapters paywall.
+  commandFunction: |
+    (config) => ({
+      command: "node",
+      args: ["dist/stdio.js"],
+      env: {
+        CIPHER_SCAN_API_URL: config.CIPHER_SCAN_API_URL,
+        CIPHER_PWNED_URL: config.CIPHER_PWNED_URL,
+        CIPHER_JITO_TIP_URL: config.CIPHER_JITO_TIP_URL,
+        CIPHER_REPO_HEALTH_URL: config.CIPHER_REPO_HEALTH_URL,
+        CIPHER_FRED_URL: config.CIPHER_FRED_URL,
+        CIPHER_DRIFT_URL: config.CIPHER_DRIFT_URL,
+        CIPHER_X402_URL: config.CIPHER_X402_URL
+      }
+    })
+
+build:
+  dockerfile: Dockerfile
+  dockerBuildPath: .
