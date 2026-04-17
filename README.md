@@ -5,6 +5,37 @@
 [![MCP](https://img.shields.io/badge/MCP-server-8A2BE2)](https://modelcontextprotocol.io)
 [![x402](https://img.shields.io/badge/x402-v2-00d084)](https://x402.org)
 
+---
+
+## 💰 x402 Paid Endpoint Starter Kit — $15
+
+The same production-grade paywall stack behind this MCP server, packaged as a
+Next.js 16 starter you can deploy in under 30 minutes.
+
+**What's in the ZIP (158 KB):**
+- Complete Next.js 16 starter repo, zero placeholders
+- Pre-wired x402 facilitator middleware
+- `.env.example` with every variable commented
+- 7-page tutorial PDF (the same article I published on dev.to, styled)
+- One-command Vercel deploy script (`deploy.sh` + `deploy.bat`)
+
+**How to buy (crypto-direct, no KYC, no middleman):**
+
+1. Send **$15 USD-equivalent** to one of the wallets below.
+2. Email the TX hash to **amrinder847@gmail.com** with subject `[x402-kit] <chain>:<tx-hash>`.
+3. Get the ZIP in reply within minutes — delivery is automated.
+
+| Chain | Asset | Address |
+|-------|-------|---------|
+| Base mainnet | USDC | `0x2a33D2414312e8776dA4011c2586c2d067267210` |
+| Ethereum / Polygon / Arbitrum / Optimism | USDC | `0x2a33D2414312e8776dA4011c2586c2d067267210` |
+| Solana | USDC or SOL | `cR9KrbsLVJvir5rY9cfY3WeNoxMwUGofzpCoVyobryy` |
+| Bitcoin | BTC | `bc1qeg97njaccajx95as5k3gelrpx0umlw6dhhtfc6` |
+
+_Subject format is strict — include the `chain:hash` exactly so the verifier picks it up._
+
+---
+
 An MCP server that exposes 8 Solana / crypto / macro tools to any MCP-aware
 client (Claude Desktop, Cursor, Cline, Continue, etc.). Seven of the tools
 are gated behind the **x402** payment protocol — agents auto-pay in USDC on
@@ -28,8 +59,10 @@ Base, $0.005 – $0.25 per tool call. One tool is free (educational).
 | `solana_wallet_security_audit_rules()` | **free** | local (v1.1.0 ruleset) |
 | `get_premium_cipher_chapter(slug)` | $0.25 | `cipher-x402.vercel.app` |
 
-Payment recipient: `0xa0630fAD18C732e94D56d2D5F630963eb8fB9640` (Base, USDC
+Payment recipient: `0x2a33D2414312e8776dA4011c2586c2d067267210` (Base, USDC
 `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913`).
+
+_Upstream endpoints are being rotated to this address during the 2026-04-17 cutover; if your x402 client reports the legacy `0xa063...9640` recipient, the rotation has not yet reached that endpoint. See `docs/ops/payout-rotation.md` for status._
 
 ## Install (Claude Desktop)
 
