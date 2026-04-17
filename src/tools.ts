@@ -46,6 +46,8 @@ const CIPHER_DRIFT =
   "https://cipher-drift-exposure.vercel.app";
 const CIPHER_X402 =
   process.env.CIPHER_X402_URL ?? "https://cipher-x402.vercel.app";
+const CIPHER_COINALYZE =
+  process.env.CIPHER_COINALYZE_URL ?? "https://cipher-coinalyze.vercel.app";
 
 export const TOOLS: ToolDef[] = [
   {
@@ -220,6 +222,31 @@ export const TOOLS: ToolDef[] = [
       properties: {},
     },
     build: () => ({ url: "local://wallet-audit-rules" }),
+  },
+  {
+    name: "coinalyze_funding_rates",
+    description:
+      "Fetch perpetual-futures funding-rate intelligence for a given base asset (e.g. 'BTC', 'ETH', 'SOL') aggregated across 17 major perp venues — Binance, Bybit, OKX, BitMEX, Deribit, dYdX, Hyperliquid, Bitfinex, Huobi, Kraken, Phemex, WOO X, Aster, Lighter, Coinbase, Gate.io, Vertex. Returns per-exchange rate + USD open interest, OI-weighted aggregate funding, divergence in bps, and max/min funding exchange — pre-computed for perp-arbitrage bots. Priced at $0.01 USDC on Base (x402).",
+    priceUsdc: 0.01,
+    endpoint: CIPHER_COINALYZE,
+    method: "GET",
+    inputSchema: {
+      type: "object",
+      properties: {
+        symbol: {
+          type: "string",
+          description:
+            "Base asset ticker (1-12 alphanumerics), e.g. 'BTC', 'ETH', 'SOL', 'DOGE', 'XRP', 'AVAX', 'LINK', 'APT', 'SUI'.",
+          pattern: "^[A-Za-z0-9]{1,12}$",
+        },
+      },
+      required: ["symbol"],
+    },
+    build: ({ symbol }) => ({
+      url: `${CIPHER_COINALYZE}/api/funding/${encodeURIComponent(
+        String(symbol).toUpperCase(),
+      )}`,
+    }),
   },
   {
     name: "get_premium_cipher_chapter",

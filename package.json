@@ -1,7 +1,7 @@
 {
   "name": "cipher-x402-mcp",
-  "version": "0.1.0",
-  "description": "MCP server exposing 8 CIPHER x402-gated Solana/crypto/macro tools. AI agents auto-pay via the x402 protocol (USDC on Base) per tool call.",
+  "version": "0.2.0",
+  "description": "MCP server exposing 9 CIPHER x402-gated Solana/crypto/macro tools. AI agents auto-pay via the x402 protocol (USDC on Base) per tool call.",
   "type": "module",
   "main": "dist/src/stdio.js",
   "bin": {
