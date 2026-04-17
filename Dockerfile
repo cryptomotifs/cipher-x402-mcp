@@ -19,4 +19,4 @@ COPY --from=builder /app/dist ./dist
 # Default entrypoint = stdio transport (what Smithery + Claude Desktop expect).
 # Override with `docker run ... node dist/http.js` for HTTP mode on port 8080.
 EXPOSE 8080
-CMD ["node", "dist/stdio.js"]
+CMD ["node", "dist/src/stdio.js"]

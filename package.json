@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "description": "MCP server exposing 8 CIPHER x402-gated Solana/crypto/macro tools. AI agents auto-pay via the x402 protocol (USDC on Base) per tool call.",
   "type": "module",
-  "main": "dist/stdio.js",
+  "main": "dist/src/stdio.js",
   "bin": {
-    "cipher-x402-mcp": "dist/stdio.js"
+    "cipher-x402-mcp": "dist/src/stdio.js"
   },
   "files": [
     "dist",
@@ -15,10 +15,10 @@
   ],
   "scripts": {
     "build": "tsc",
-    "start": "node dist/stdio.js",
-    "start:http": "node dist/http.js",
+    "start": "node dist/src/stdio.js",
+    "start:http": "node dist/src/http.js",
     "typecheck": "tsc --noEmit",
-    "smoke": "node dist/smoke.js",
+    "smoke": "node dist/src/smoke.js",
     "prepublishOnly": "npm run build"
   },
   "keywords": [

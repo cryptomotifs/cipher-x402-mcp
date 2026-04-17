@@ -3,7 +3,7 @@
  */
 
 import type { IncomingMessage, ServerResponse } from "node:http";
-import { TOOLS } from "../dist/tools.js";
+import { TOOLS } from "../src/tools.js";
 
 export default function handler(
   _req: IncomingMessage,

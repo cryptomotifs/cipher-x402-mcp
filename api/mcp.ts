@@ -10,7 +10,7 @@
 
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
-import { buildServer } from "../dist/server.js";
+import { buildServer } from "../src/server.js";
 
 // Reuse a single server + transport across warm invocations.
 let bootstrapped: {

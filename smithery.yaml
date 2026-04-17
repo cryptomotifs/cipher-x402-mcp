@@ -45,7 +45,7 @@ startCommand:
   commandFunction: |
     (config) => ({
       command: "node",
-      args: ["dist/stdio.js"],
+      args: ["dist/src/stdio.js"],
       env: {
         CIPHER_SCAN_API_URL: config.CIPHER_SCAN_API_URL,
         CIPHER_PWNED_URL: config.CIPHER_PWNED_URL,
