@@ -1,7 +1,7 @@
 /**
  * Smoke test — CI runs this after build to verify:
  *   1. The server module imports + builds without runtime error.
- *   2. The tools registry lists all 8 expected tools.
+ *   2. The tools registry lists all 9 expected tools.
  *   3. The free tool (`solana_wallet_security_audit_rules`) returns valid JSON.
  *
  * Does NOT hit live upstream endpoints (avoids flakes + avoids burning quota).
@@ -18,6 +18,7 @@ const EXPECTED_TOOLS = [
   "fred_macro_series",
   "check_drift_exposure",
   "solana_wallet_security_audit_rules",
+  "coinalyze_funding_rates",
   "get_premium_cipher_chapter",
 ];
 
