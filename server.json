@@ -1,0 +1,18 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.cryptomotifs/cipher-x402-mcp",
+  "title": "CIPHER x402 — Paid Solana & Crypto Tools",
+  "description": "MCP server exposing 8 CIPHER tools (Solana wallet scan, password breach check, Jito tip calculator, GitHub repo health, FRED macro series, Drift exposure, free wallet-audit rules v1.1.0, premium CIPHER chapters). 7 tools are x402-gated on Base (USDC, $0.005-$0.25 per call) with forward-only payment relay — agent wallets pay upstream directly.",
+  "repository": {
+    "url": "https://github.com/cryptomotifs/cipher-x402-mcp",
+    "source": "github"
+  },
+  "version": "0.1.0",
+  "websiteUrl": "https://cipher-x402-mcp.vercel.app",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://cipher-x402-mcp.vercel.app/mcp"
+    }
+  ]
+}

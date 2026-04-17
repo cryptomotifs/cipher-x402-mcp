@@ -1,0 +1,47 @@
+name: Publish
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+jobs:
+  npm-publish:
+    runs-on: ubuntu-latest
+    # Skipped unless NPM_TOKEN secret is set — avoids CI failures on first
+    # release. Add the secret later to enable npm distribution.
+    if: ${{ vars.ENABLE_NPM_PUBLISH == 'true' }}
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+      - run: npm ci --no-audit --no-fund
+      - run: npm run build
+      - run: npm run smoke
+      - name: Publish to npm (provenance)
+        run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  mcp-registry-publish:
+    runs-on: ubuntu-latest
+    # Does NOT depend on npm-publish — OIDC auth verifies the
+    # io.github.cryptomotifs/* namespace without needing an npm package live.
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install mcp-publisher
+        run: |
+          curl -L "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_linux_amd64.tar.gz" | tar xz mcp-publisher
+          chmod +x mcp-publisher
+      - name: Login via GitHub OIDC
+        run: ./mcp-publisher login github-oidc
+      - name: Publish to MCP Registry
+        run: ./mcp-publisher publish
