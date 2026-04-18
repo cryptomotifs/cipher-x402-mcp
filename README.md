@@ -19,6 +19,24 @@ Base, $0.005 – $0.25 per tool call. One tool is free (educational).
 
 ---
 
+## Hosted Plans (MCPize)
+
+Prefer not to self-host? A managed listing is live on MCPize with gateway
+proxying, rate limiting, API-key auth, and consolidated billing:
+
+**[mcpize.com/mcp/cipher-x402-mcp](https://mcpize.com/mcp/cipher-x402-mcp)**
+
+| Plan | Price | Requests / mo | Rate limit | Includes |
+|------|-------|---------------|------------|----------|
+| Free | $0 | 100 | 10 / min | Free tools + `solana_wallet_scan` |
+| Starter | $9 | 1,000 | 60 / min | 4 read-only tools (scan, HIBP, repo health, FRED) |
+| Pro (recommended) | $29 | 5,000 | 120 / min | All 8 tools, priority GitHub support |
+| Team | $99 | 25,000 | 600 / min | All 8 tools + custom upstream override, 24h response SLA |
+
+Pay-as-you-go via MCPize's gateway. Self-host is still free (this repo, MIT).
+
+---
+
 ## Tools
 
 | Tool | Price (USDC, Base) | Upstream |
