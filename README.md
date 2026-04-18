@@ -201,6 +201,8 @@ Solo Canadian dev (Ontario, ET). Available 20 hr/wk for x402 / MCP / Solana inte
 
 **Walkthrough of the settlement-path hardening I ship:** [dev.to/sai_93caeceb4f6a4d9969910/shipped-x402-paid-endpoint-starter-kit-nextjs-16-5g39](https://dev.to/sai_93caeceb4f6a4d9969910/shipped-x402-paid-endpoint-starter-kit-nextjs-16-5g39)
 
+**Also:** prompt packs for Solana / x402 / MCP devs at [amrindermagic.gumroad.com](https://amrindermagic.gumroad.com/).
+
 ---
 
 ## Related
