@@ -4,6 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![MCP](https://img.shields.io/badge/MCP-server-8A2BE2)](https://modelcontextprotocol.io)
 [![x402](https://img.shields.io/badge/x402-v2-00d084)](https://x402.org)
+[![MCPize](https://img.shields.io/badge/MCPize-%240%20%2F%20%249%20%2F%20%2429%20%2F%20%2499-00d084)](https://mcpize.com/mcp/cipher-x402-mcp)
 
 An MCP server that exposes 8 Solana / crypto / macro tools to any MCP-aware
 client (Claude Desktop, Cursor, Cline, Continue, etc.). Seven of the tools
