@@ -48,6 +48,14 @@ const CIPHER_X402 =
   process.env.CIPHER_X402_URL ?? "https://cipher-x402.vercel.app";
 const CIPHER_COINALYZE =
   process.env.CIPHER_COINALYZE_URL ?? "https://cipher-coinalyze.vercel.app";
+const CIPHER_PUBMED =
+  process.env.CIPHER_PUBMED_URL ?? "https://cipher-x402-pubmed.vercel.app";
+const CIPHER_OSM =
+  process.env.CIPHER_OSM_URL ?? "https://cipher-x402-osm.vercel.app";
+const CIPHER_USDA =
+  process.env.CIPHER_USDA_URL ?? "https://cipher-x402-usda.vercel.app";
+const CIPHER_FDA =
+  process.env.CIPHER_FDA_URL ?? "https://cipher-x402-fda.vercel.app";
 
 export const TOOLS: ToolDef[] = [
   {
@@ -275,6 +283,134 @@ export const TOOLS: ToolDef[] = [
     build: ({ slug }) => ({
       url: `${CIPHER_X402}/premium/${encodeURIComponent(String(slug))}`,
     }),
+  },
+  {
+    name: "pubmed_medical_search",
+    description:
+      "Search PubMed (NCBI) for medical / life-sciences literature by keyword. Returns enriched article list: pmid, title, authors, journal, year, pub_types, plus a year-range + has-meta-analysis / has-review enrichment block. Ideal for medical RAG agents. Priced at $0.005 USDC on Base (x402).",
+    priceUsdc: 0.005,
+    endpoint: CIPHER_PUBMED,
+    method: "GET",
+    inputSchema: {
+      type: "object",
+      properties: {
+        term: {
+          type: "string",
+          description:
+            "Free-text biomedical query (e.g. 'metformin liver', 'semaglutide cardiovascular outcomes').",
+        },
+        retmax: {
+          type: "number",
+          description: "Max articles to return (1-20). Default 5.",
+          minimum: 1,
+          maximum: 20,
+        },
+      },
+      required: ["term"],
+    },
+    build: ({ term, retmax }) => {
+      const q = new URLSearchParams({ term: String(term) });
+      if (retmax != null) q.set("retmax", String(retmax));
+      return { url: `${CIPHER_PUBMED}/search?${q}` };
+    },
+  },
+  {
+    name: "osm_geocode",
+    description:
+      "Forward geocoding via OpenStreetMap Nominatim. Address string → lat/lon + normalized address block (country_code, state, city, postcode, road) + match_quality label. Priced at $0.001 USDC on Base (x402).",
+    priceUsdc: 0.001,
+    endpoint: CIPHER_OSM,
+    method: "GET",
+    inputSchema: {
+      type: "object",
+      properties: {
+        q: {
+          type: "string",
+          description: "Address to geocode (e.g. '1600 Pennsylvania Ave NW, Washington DC').",
+        },
+      },
+      required: ["q"],
+    },
+    build: ({ q }) => ({
+      url: `${CIPHER_OSM}/geocode?q=${encodeURIComponent(String(q))}`,
+    }),
+  },
+  {
+    name: "osm_reverse_geocode",
+    description:
+      "Reverse geocoding via OpenStreetMap Nominatim. lat/lon → normalized address + place class/type. Priced at $0.001 USDC on Base (x402).",
+    priceUsdc: 0.001,
+    endpoint: CIPHER_OSM,
+    method: "GET",
+    inputSchema: {
+      type: "object",
+      properties: {
+        lat: { type: "number", description: "Latitude (WGS84)." },
+        lon: { type: "number", description: "Longitude (WGS84)." },
+      },
+      required: ["lat", "lon"],
+    },
+    build: ({ lat, lon }) => ({
+      url: `${CIPHER_OSM}/reverse?lat=${encodeURIComponent(String(lat))}&lon=${encodeURIComponent(String(lon))}`,
+    }),
+  },
+  {
+    name: "usda_food_nutrition",
+    description:
+      "USDA FoodData Central nutrition lookup. Query any food (brand or generic) and receive the best-matching record with a clean per_100g macro block (calories_kcal, protein_g, carb_g, fat_g, fiber_g, sugar_g, potassium_mg), plus alternates. Priced at $0.002 USDC on Base (x402).",
+    priceUsdc: 0.002,
+    endpoint: CIPHER_USDA,
+    method: "GET",
+    inputSchema: {
+      type: "object",
+      properties: {
+        query: {
+          type: "string",
+          description: "Food name (e.g. 'banana', 'chicken breast raw').",
+        },
+        limit: {
+          type: "number",
+          description: "Alternates to return (1-10). Default 5.",
+          minimum: 1,
+          maximum: 10,
+        },
+      },
+      required: ["query"],
+    },
+    build: ({ query, limit }) => {
+      const q = new URLSearchParams({ query: String(query) });
+      if (limit != null) q.set("limit", String(limit));
+      return { url: `${CIPHER_USDA}/food?${q}` };
+    },
+  },
+  {
+    name: "openfda_adverse_events",
+    description:
+      "openFDA drug adverse-event lookup for the last 12 months. Returns top reactions, report count, and seriousness breakdown (serious vs non-serious). Searches brand, generic, and medicinal-product names in parallel. Priced at $0.005 USDC on Base (x402).",
+    priceUsdc: 0.005,
+    endpoint: CIPHER_FDA,
+    method: "GET",
+    inputSchema: {
+      type: "object",
+      properties: {
+        drug: {
+          type: "string",
+          description: "Drug name (brand or generic), e.g. 'ozempic', 'metformin'.",
+        },
+        limit: {
+          type: "number",
+          description: "Top-reaction count to return (1-25). Default 10.",
+          minimum: 1,
+          maximum: 25,
+        },
+      },
+      required: ["drug"],
+    },
+    build: ({ drug, limit }) => {
+      const q = new URLSearchParams({ drug: String(drug) });
+      if (limit != null) q.set("limit", String(limit));
+      return { url: `${CIPHER_FDA}/adverse?${q}` };
+    },
   },
 ];
 

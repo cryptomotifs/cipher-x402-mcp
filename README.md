@@ -216,6 +216,17 @@ Solo Canadian dev (Ontario, ET). Available 20 hr/wk for x402 / MCP / Solana inte
   CI on plaintext Solana private keys
   ([github.com/cryptomotifs/cipher-solana-wallet-audit](https://github.com/cryptomotifs/cipher-solana-wallet-audit)).
 
+### Niche x402 endpoints (non-crypto agent surfaces)
+
+- **cipher-x402-pubmed** — $0.005/call, PubMed medical literature search
+  ([cipher-x402-pubmed.vercel.app](https://cipher-x402-pubmed.vercel.app)).
+- **cipher-x402-osm** — $0.001/call, OpenStreetMap geocoding + reverse-geocoding
+  ([cipher-x402-osm.vercel.app](https://cipher-x402-osm.vercel.app)).
+- **cipher-x402-usda** — $0.002/call, USDA FoodData Central nutrition lookup
+  ([cipher-x402-usda.vercel.app](https://cipher-x402-usda.vercel.app)).
+- **cipher-x402-fda** — $0.005/call, openFDA drug adverse-event lookup
+  ([cipher-x402-fda.vercel.app](https://cipher-x402-fda.vercel.app)).
+
 ## License
 
 MIT — see [LICENSE](LICENSE).

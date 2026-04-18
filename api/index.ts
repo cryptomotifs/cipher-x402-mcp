@@ -110,6 +110,51 @@ const TOOL_BAZAAR_META: Record<
     tags: ["cipher", "trading", "research", "ebook", "premium"],
     output_example: { chapter_id: 3, content_md_chars: 12450, version: 1 },
   },
+  pubmed_medical_search: {
+    category: "scientific-data",
+    tags: ["pubmed", "ncbi", "medical", "rag", "life-sciences", "agent-ready"],
+    output_example: {
+      query: "metformin liver",
+      count: 5,
+      total_available: 412,
+      enrichment: { year_range: "2021-2024", has_meta_analysis: true },
+    },
+  },
+  osm_geocode: {
+    category: "geo-data",
+    tags: ["geocoding", "nominatim", "openstreetmap", "location", "agent-ready"],
+    output_example: {
+      query: "CN Tower Toronto",
+      match: { lat: 43.6426, lon: -79.3871, place_class: "tourism" },
+      enrichment: { match_quality: "high" },
+    },
+  },
+  osm_reverse_geocode: {
+    category: "geo-data",
+    tags: ["reverse-geocoding", "nominatim", "openstreetmap", "location", "agent-ready"],
+    output_example: {
+      query: { lat: 43.6426, lon: -79.3871 },
+      place: { display_name: "CN Tower, Toronto, ON, Canada" },
+    },
+  },
+  usda_food_nutrition: {
+    category: "nutrition-data",
+    tags: ["usda", "nutrition", "food", "macros", "diet", "health", "agent-ready"],
+    output_example: {
+      query: "banana",
+      top_match: { fdc_id: 1102653, per_100g: { calories_kcal: 89, protein_g: 1.09 } },
+    },
+  },
+  openfda_adverse_events: {
+    category: "public-records",
+    tags: ["fda", "openfda", "drug-safety", "adverse-events", "regulatory", "agent-ready"],
+    output_example: {
+      drug: "metformin",
+      report_count: 8421,
+      top_reactions: [{ term: "NAUSEA", count: 642 }],
+      seriousness: { serious: 3120, non_serious: 5301 },
+    },
+  },
 };
 
 function buildBazaarHint(t: ToolDef): Record<string, unknown> | undefined {
@@ -164,6 +209,10 @@ export default function handler(
             "crypto-derivatives",
             "developer-intelligence",
             "research",
+            "scientific-data",
+            "geo-data",
+            "nutrition-data",
+            "public-records",
           ],
           discovery_hints: {
             cdp:
