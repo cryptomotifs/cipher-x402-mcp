@@ -158,6 +158,19 @@ JSON manifest used by registries.
 
 ---
 
+## 🛒 Buy
+
+A few small paid sidecars if the MCP is useful and you want to go deeper — all direct-pay, no platform middleman:
+
+- **[cipher-checkout.vercel.app](https://cipher-checkout.vercel.app/)** — three products, pay by card (Stripe) or crypto (Base USDC, Solana USDC, BTC):
+  - **[x402 Paid Endpoint Starter Kit](https://buy.stripe.com/9B6cN55SlfXJ4Af9Nu2Ry09) — $19** — Next.js 16 starter repo + 7-page tutorial PDF + one-command Vercel deploy. Working x402 endpoint that verifies `X-PAYMENT` against the facilitator.
+  - **[Solana Solo-Dev Playbook (PDF)](https://buy.stripe.com/9B6aEX94xh1NgiXaRy2Ry0a) — $9** — 150-page playbook covering trading, risk, security, architecture, revenue, compliance, and infra for solo Solana + x402 devs in 2026.
+  - **[Solana Bot Toolkit Walkthrough](https://buy.stripe.com/aFa14n2G9bHt3wb4ta2Ry0b) — $29** — Deep walkthrough of the open-source [cipher-solana-bot-toolkit](https://github.com/cryptomotifs/cipher-solana-bot-toolkit) (5 modules: flash-loan, volume bot, arb/MEV, memecoin launcher, copy-trade).
+
+Also available as a managed MCPize listing: **[mcpize.com/mcp/cipher-x402-mcp](https://mcpize.com/mcp/cipher-x402-mcp)** — Free / $9 / $29 / $99 per month.
+
+---
+
 ## 🙏 Support
 
 This is free + MIT. If it saved you time, tips in SOL are appreciated:
