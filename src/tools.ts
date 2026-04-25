@@ -536,6 +536,27 @@ export const WALLET_AUDIT_RULESET = {
 export const AUDIT_COMP_LIVE_LISTINGS = {
   snapshot_at: "2026-04-25",
   source_repo: "https://github.com/cryptomotifs/cipher-signal-engine",
+  /** Submission-form automation available per platform.  Each cipher-stack
+   * bridge is a Chrome-attached Python tool that drives the warden form
+   * end-to-end from a Markdown writeup. */
+  bridges: {
+    code4rena: {
+      repo: "https://github.com/cryptomotifs/cipher-c4-bridge",
+      status: "production",
+      production_evidence: [
+        "code4rena.com/audits/2026-04-monetrix#issue=8c4E5HQpxDv (Medium, 2026-04-25)",
+        "code4rena.com/audits/2026-04-monetrix#issue=kDqTc7u3ods (QA, 2026-04-25)",
+      ],
+    },
+    cantina: {
+      repo: "https://github.com/cryptomotifs/cipher-cantina-bridge",
+      status: "alpha",
+    },
+    sherlock: {
+      repo: "https://github.com/cryptomotifs/cipher-sherlock-bridge",
+      status: "alpha",
+    },
+  },
   programs: [
     {
       platform: "code4rena",
