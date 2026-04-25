@@ -11,7 +11,11 @@ import {
   ListToolsRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
 
-import { TOOLS, WALLET_AUDIT_RULESET } from "./tools.js";
+import {
+  AUDIT_COMP_LIVE_LISTINGS,
+  TOOLS,
+  WALLET_AUDIT_RULESET,
+} from "./tools.js";
 import { callUpstream } from "./upstream.js";
 
 export function buildServer(): Server {
@@ -70,13 +74,17 @@ export function buildServer(): Server {
       };
     }
 
-    // Free educational tool — served locally.
+    // Free educational tool — served locally. Dispatch by tool name.
     if (tool.endpoint === null) {
+      const localPayload =
+        name === "audit_comp_live_listings"
+          ? AUDIT_COMP_LIVE_LISTINGS
+          : WALLET_AUDIT_RULESET;
       return {
         content: [
           {
             type: "text",
-            text: JSON.stringify(WALLET_AUDIT_RULESET, null, 2),
+            text: JSON.stringify(localPayload, null, 2),
           },
         ],
       };

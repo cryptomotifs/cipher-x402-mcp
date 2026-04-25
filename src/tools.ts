@@ -221,7 +221,7 @@ export const TOOLS: ToolDef[] = [
   {
     name: "solana_wallet_security_audit_rules",
     description:
-      "Return metadata for the cipher-solana-wallet-audit v1.1.0 ruleset — the free MIT GitHub Action that catches plaintext Solana private keys, seed phrases, and leaked .env files in CI. Free, no payment required. Intended for educational use and agent-driven repo hardening.",
+      "Return metadata for the cipher-solana-wallet-audit v1.2.0 ruleset — the free MIT GitHub Action that catches Solana wallet anti-patterns in CI: plaintext private keys, seed phrases (in comments OR string literals), Anchor.toml wallet leaks, Drift-hack-derived admin bundles, leaked .env files, hardcoded RPC URLs. Free, no payment required.",
     priceUsdc: 0,
     endpoint: null, // served locally, no upstream
     method: "GET",
@@ -230,6 +230,19 @@ export const TOOLS: ToolDef[] = [
       properties: {},
     },
     build: () => ({ url: "local://wallet-audit-rules" }),
+  },
+  {
+    name: "audit_comp_live_listings",
+    description:
+      "Return a curated snapshot of currently-live audit competitions and bug-bounty programs across Code4rena, Cantina, Sherlock, and direct-protocol channels. Useful for solo wardens triaging which contests to enter. Snapshot updates with each cipher-x402-mcp release; treat the data as a hint, always cross-check the platform before submitting. Free, no payment required.",
+    priceUsdc: 0,
+    endpoint: null, // served locally, no upstream
+    method: "GET",
+    inputSchema: {
+      type: "object",
+      properties: {},
+    },
+    build: () => ({ url: "local://audit-comp-listings" }),
   },
   {
     name: "coinalyze_funding_rates",
@@ -416,39 +429,82 @@ export const TOOLS: ToolDef[] = [
 
 export const WALLET_AUDIT_RULESET = {
   name: "cipher-solana-wallet-audit",
-  version: "v1.1.0",
+  version: "v1.2.0",
   license: "MIT",
   homepage: "https://github.com/cryptomotifs/cipher-solana-wallet-audit",
   marketplace:
     "https://github.com/marketplace/actions/cipher-solana-wallet-audit",
   description:
-    "A free GitHub Action that fails CI on Solana wallet-security anti-patterns: plaintext private keys, seed phrases in comments, leaked .env files, hardcoded RPC URLs with embedded API keys.",
+    "A free GitHub Action that fails CI on Solana wallet-security anti-patterns: plaintext private keys, seed phrases (in comments OR string literals), Anchor.toml wallet leaks, post-Drift-hack admin patterns, leaked .env files, hardcoded RPC URLs with embedded API keys.",
   rules: [
+    // v1.0 — base detection set
     {
-      id: "solana-plaintext-secret-key",
+      id: "PLAINTEXT_KEY",
       severity: "critical",
-      pattern: "64-byte array or bs58 base58 secret key literal",
+      pattern: "Base58 strings 86-90 chars (likely Solana secret keys).",
     },
     {
-      id: "seed-phrase-bip39",
+      id: "SEED_IN_COMMENT",
       severity: "critical",
-      pattern: "12 or 24-word BIP-39 mnemonic in source / comment",
+      pattern: "12 or 24-word BIP-39 mnemonic inside a comment.",
     },
     {
-      id: "leaked-env-file",
+      id: "JSON_KEYPAIR",
+      severity: "critical",
+      pattern: "64-integer JSON array (Solana CLI keypair format).",
+    },
+    {
+      id: "ENV_LEAK",
       severity: "high",
-      pattern: ".env tracked in git (checks git ls-files + .gitignore)",
+      pattern: ".env present but not covered by any .gitignore.",
     },
     {
-      id: "hardcoded-rpc-with-key",
-      severity: "high",
-      pattern: "Helius / QuickNode / Alchemy URL with embedded API key",
-    },
-    {
-      id: "private-key-json-path",
+      id: "SOLANA_CONFIG_KEYPAIR",
       severity: "critical",
-      pattern: "Path to id.json / keypair.json in committed source",
+      pattern: "Tracked file matches `id.json` or `*-keypair.json`.",
     },
+    {
+      id: "HARDCODED_RPC",
+      severity: "medium",
+      pattern: "Mainnet RPC URL with embedded api-key= / token= query.",
+    },
+    // v1.1 — Drift-hack-derived correlations
+    {
+      id: "NONCE_ADVANCE_IN_MULTISIG",
+      severity: "critical",
+      pattern:
+        "AdvanceNonce within 50 lines of SetAuthority / UpgradeProgram (Drift-hack pattern).",
+    },
+    {
+      id: "LOW_LIQUIDITY_ORACLE_WHITELIST",
+      severity: "high",
+      pattern:
+        "Oracle allow-list add with no preceding liquidity / depth check.",
+    },
+    {
+      id: "UNBOUNDED_ADMIN_INSTRUCTION_BUNDLE",
+      severity: "high",
+      pattern:
+        "Single tx bundles 2+ admin instructions (SetAuthority / UpgradeProgram).",
+    },
+    // v1.2 — additional commit-time leaks
+    {
+      id: "MNEMONIC_IN_STRING",
+      severity: "critical",
+      pattern:
+        "12 or 24-word BIP-39 mnemonic as a string literal assigned to mnemonic / seed / wallet*phrase identifier.",
+    },
+    {
+      id: "ANCHOR_WALLET_LEAK",
+      severity: "critical",
+      pattern:
+        "Anchor.toml [provider].wallet path resolves to a keypair file inside the repo.",
+    },
+  ],
+  changelog: [
+    "v1.2.0 (2026-04-25) — added MNEMONIC_IN_STRING and ANCHOR_WALLET_LEAK.",
+    "v1.1.0 (2026-04-18) — added the three Drift-hack-derived correlations.",
+    "v1.0.0 (2026-04-15) — initial six commit-time leak patterns.",
   ],
   usage: {
     workflow: ".github/workflows/wallet-audit.yml",
@@ -472,4 +528,131 @@ export const WALLET_AUDIT_RULESET = {
       "critical-count": "critical-severity findings",
     },
   },
+};
+
+/** Curated snapshot of currently-live audit-comp / bug-bounty programs.
+ * Updated 2026-04-25.  Saturation column is informational, not a hard floor.
+ * Always cross-check the platform listing before submitting. */
+export const AUDIT_COMP_LIVE_LISTINGS = {
+  snapshot_at: "2026-04-25",
+  source_repo: "https://github.com/cryptomotifs/cipher-signal-engine",
+  programs: [
+    {
+      platform: "code4rena",
+      slug: "2026-04-monetrix",
+      url: "https://code4rena.com/audits/2026-04-monetrix",
+      kind: "competition",
+      pool_usdc: 22000,
+      ends_utc: "2026-05-04T20:00:00Z",
+      language: "Solidity",
+      chain: "HyperEVM",
+      notes:
+        "Monetrix USDC-backed synthetic dollar on HyperEVM. PoC required for H/M.",
+    },
+    {
+      platform: "code4rena",
+      slug: "2026-04-k2",
+      url: "https://code4rena.com/audits/2026-04-k2",
+      kind: "competition",
+      pool_usdc: 135000,
+      ends_utc: "2026-05-27T13:00:00Z",
+      language: "Rust",
+      chain: "Stellar / Soroban",
+      notes: "K2 lending. Pooled, isolated, gated markets.",
+    },
+    {
+      platform: "sherlock",
+      slug: "1260",
+      url: "https://audits.sherlock.xyz/contests/1260",
+      kind: "competition",
+      pool_usdc: 550000,
+      currency: "RLUSD",
+      ends_utc: "2026-04-27T09:30:00Z",
+      language: "C++",
+      chain: "XRP Ledger",
+      notes:
+        "XLS-0056 / 75 / 82 / 94 / 96 / 68 protocol features. Public-server admins trusted.",
+    },
+    {
+      platform: "cantina",
+      uuid: "55316f42-3c5e-4746-9bd0-0f18dcbc344b",
+      url: "https://cantina.xyz/bounties/55316f42-3c5e-4746-9bd0-0f18dcbc344b",
+      kind: "bounty",
+      pool_usdc: 5000000,
+      ongoing: true,
+      language: "Solidity / Go",
+      chain: "Ethereum + Base",
+      notes:
+        "Coinbase mainnet contracts + Base. Tier-0 critical = up to $5M; saturated (~750+ submissions).",
+    },
+    {
+      platform: "cantina",
+      uuid: "35a5f0a1-2ffd-432c-8f3b-77d169add8c3",
+      url: "https://cantina.xyz/bounties/35a5f0a1-2ffd-432c-8f3b-77d169add8c3",
+      kind: "bounty",
+      pool_usdc: 2500000,
+      ongoing: true,
+      language: "Solidity",
+      chain: "Ethereum + L2s",
+      notes:
+        "Morpho — 11 in-scope repos (vault-v2, morpho-blue, metamorpho, IRM, oracles, pre-liq, public-allocator, URD, adapter-registries).",
+    },
+    {
+      platform: "cantina",
+      uuid: "253a4e11-c99c-49e9-83f7-d076d8804475",
+      url: "https://cantina.xyz/bounties/253a4e11-c99c-49e9-83f7-d076d8804475",
+      kind: "bounty",
+      pool_usdc: 500000,
+      ongoing: true,
+      language: "Rust / Anchor",
+      chain: "Solana",
+      notes:
+        "pump.fun — 3 programs (Pump, Pump Fees, Pump AMM). Source closed; IDL + docs public at github.com/pump-fun/pump-public-docs.",
+    },
+    {
+      platform: "cantina",
+      uuid: "f9c0e285-1713-48f6-ac80-3271892c87f5",
+      url: "https://cantina.xyz/bounties/f9c0e285-1713-48f6-ac80-3271892c87f5",
+      kind: "bounty",
+      pool_usdc: 100000,
+      ongoing: true,
+      language: "Solidity",
+      chain: "Ethereum + L2s",
+      notes:
+        "Sablier — airdrops, flow, lockup. 6 prior audits. Public audits at github.com/sablier-labs/audits.",
+    },
+    {
+      platform: "cantina",
+      uuid: "78a734d2-b460-4245-9c81-833487d6a339",
+      url: "https://cantina.xyz/bounties/78a734d2-b460-4245-9c81-833487d6a339",
+      kind: "bounty",
+      pool_usdc: 75000,
+      ongoing: true,
+      language: "Solidity",
+      chain: "Ethereum",
+      notes: "BitGo ETH multisig v2 + v4. Modern OZ patterns in v4.",
+    },
+    {
+      platform: "solana-foundation",
+      url: "mailto:security@solana.com",
+      kind: "cold-disclose",
+      pool_usdc_max: 2000000,
+      ongoing: true,
+      language: "Rust / C / C++",
+      chain: "Solana validator clients",
+      notes:
+        "Direct cold-disclose for consensus / validator-client divergences. SLA 30 days.",
+    },
+    {
+      platform: "colosseum-frontier",
+      url: "https://www.colosseum.com/frontier",
+      kind: "hackathon",
+      pool_usdc: 640000,
+      ends_utc: "2026-05-11T03:59:00Z",
+      language: "Any (Solana focus)",
+      chain: "Solana + Base + others",
+      notes:
+        "Frontier hackathon. Grand $30K + 20 standout teams $10K each + $390K side tracks + $250K accelerator pre-seed.",
+    },
+  ],
 };
