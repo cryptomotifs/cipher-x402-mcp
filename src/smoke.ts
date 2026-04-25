@@ -56,13 +56,13 @@ function main(): void {
 
   // Verify wallet-audit ruleset shape.
   assert(
-    WALLET_AUDIT_RULESET.version === "v1.2.0",
+    WALLET_AUDIT_RULESET.version === "v1.3.0",
     `wallet-audit version drift: ${WALLET_AUDIT_RULESET.version}`,
   );
   assert(
     Array.isArray(WALLET_AUDIT_RULESET.rules) &&
-      WALLET_AUDIT_RULESET.rules.length >= 11,
-    `wallet-audit rules must have >=11 entries (got ${WALLET_AUDIT_RULESET.rules.length})`,
+      WALLET_AUDIT_RULESET.rules.length >= 12,
+    `wallet-audit rules must have >=12 entries (got ${WALLET_AUDIT_RULESET.rules.length})`,
   );
 
   // Verify audit-comp listings snapshot shape.

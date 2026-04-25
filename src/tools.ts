@@ -221,7 +221,7 @@ export const TOOLS: ToolDef[] = [
   {
     name: "solana_wallet_security_audit_rules",
     description:
-      "Return metadata for the cipher-solana-wallet-audit v1.2.0 ruleset — the free MIT GitHub Action that catches Solana wallet anti-patterns in CI: plaintext private keys, seed phrases (in comments OR string literals), Anchor.toml wallet leaks, Drift-hack-derived admin bundles, leaked .env files, hardcoded RPC URLs. Free, no payment required.",
+      "Return metadata for the cipher-solana-wallet-audit v1.3.0 ruleset — the free MIT GitHub Action that catches Solana wallet anti-patterns in CI: plaintext private keys (base58 OR hex), seed phrases (in comments OR string literals), Anchor.toml wallet leaks, Drift-hack-derived admin bundles, leaked .env files, hardcoded RPC URLs. Free, no payment required.",
     priceUsdc: 0,
     endpoint: null, // served locally, no upstream
     method: "GET",
@@ -429,13 +429,13 @@ export const TOOLS: ToolDef[] = [
 
 export const WALLET_AUDIT_RULESET = {
   name: "cipher-solana-wallet-audit",
-  version: "v1.2.0",
+  version: "v1.3.0",
   license: "MIT",
   homepage: "https://github.com/cryptomotifs/cipher-solana-wallet-audit",
   marketplace:
     "https://github.com/marketplace/actions/cipher-solana-wallet-audit",
   description:
-    "A free GitHub Action that fails CI on Solana wallet-security anti-patterns: plaintext private keys, seed phrases (in comments OR string literals), Anchor.toml wallet leaks, post-Drift-hack admin patterns, leaked .env files, hardcoded RPC URLs with embedded API keys.",
+    "A free GitHub Action that fails CI on Solana wallet-security anti-patterns: plaintext private keys (base58 OR hex), seed phrases (in comments OR string literals), Anchor.toml wallet leaks, post-Drift-hack admin patterns, leaked .env files, hardcoded RPC URLs with embedded API keys.",
   rules: [
     // v1.0 — base detection set
     {
@@ -500,8 +500,16 @@ export const WALLET_AUDIT_RULESET = {
       pattern:
         "Anchor.toml [provider].wallet path resolves to a keypair file inside the repo.",
     },
+    // v1.3 — hex-encoded key literals
+    {
+      id: "HEX_PRIVATE_KEY",
+      severity: "critical",
+      pattern:
+        "64- or 128-char hex literal assigned to a private_key / secret_key / wallet_secret / signer_key / keypair_bytes identifier (covers EVM EOA + Solana secret-key shapes that the base58 PLAINTEXT_KEY rule misses).",
+    },
   ],
   changelog: [
+    "v1.3.0 (2026-04-25) — added HEX_PRIVATE_KEY for EVM/Solana hex literals.",
     "v1.2.0 (2026-04-25) — added MNEMONIC_IN_STRING and ANCHOR_WALLET_LEAK.",
     "v1.1.0 (2026-04-18) — added the three Drift-hack-derived correlations.",
     "v1.0.0 (2026-04-15) — initial six commit-time leak patterns.",
