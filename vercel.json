@@ -5,7 +5,6 @@
   "installCommand": "npm install",
   "rewrites": [
     { "source": "/mcp", "destination": "/api/mcp" },
-    { "source": "/", "destination": "/api/index" },
     { "source": "/health", "destination": "/api/index" }
   ],
   "functions": {
